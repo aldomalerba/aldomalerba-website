@@ -1,4 +1,4 @@
-# aldomalerba.dev
+# aldomalerba-website
 
 My personal website showcasing my projects, skills and blog posts, created during my free time.
 
