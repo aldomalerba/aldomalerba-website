@@ -1,6 +1,6 @@
 ---
-title: Il codice sorgente di aldomalerba.dev
+title: Il codice sorgente di aldomalerba.it
 description: Link al codice sorgente su github di aldomalerba.dev 
 date: 2023-05-22
-url: https://github.com/aldomalerba/aldomalerba.dev
+url: https://github.com/aldomalerba/aldomalerba.it
 ---

@@ -1,6 +1,6 @@
-# aldomalerba-website
+# aldomalerba.it
 
-My personal website showcasing my projects, skills and blog posts, created during my free time.
+My personal website hosted at [https://aldomalerba.it](https://aldomalerba.it) showcasing my projects, skills and blog posts, created during my free time.
 
 ## Description
 
