@@ -2,7 +2,7 @@
 external: false
 draft: false
 title: "Intrduzione a Spring Framework"
-description: "You can author content using the familiar markdown syntax you already know. All basic markdown syntax is supported."
+description: "Introduzione ai concetti principali di Spring Framework come Dependency Injection e Depenency Inversion Principle."
 date: 2022-11-02
 ---
 
@@ -29,7 +29,7 @@ Se scriviamo codice flessibile e facile da mantenere, quando i requisiti di busi
 ### Accoppiamento
 
 Una delle caratteristiche da tenere in considerazione nella programmazione OO è l'**accoppiamento**.
-Più alto sarà il grado di dipendenza tra le classi, più alto sarà l'accoppiamento (tight coupling). L'obiettivo dovrebbe essere quello di scrivere delle classi che non dipendano fortemente l'una dalle altre, cercando così di ridurre l'accoppiamento tra le classi (loose coupling).
+Più alto sarà il grado di dipendenza tra le classi, più alto sarà l'accoppiamento (tight coupling). L'obiettivo dovrebbe essere quello di scrivere delle classi che non dipendano fortemente l'una dalle altre, cercando così di ridurre l'accoppiamento (loose coupling).
 
 Vediamo ora un esempio di forte dipendenza tra due classi.
 
@@ -58,7 +58,7 @@ In questo esempio la classe *CustomersCalculatorService* dipende fortemente dall
 
 La classe *MySqlCustomerRepository* viene istanziata direttamente nel costruttore di *CustomersCalculatorService* e questo crea un forte accoppiamento tra le due classi.
 
-Se istanziassimo la classe *MySqlCustomerRepository* in ogni punto del software nel quale vogliamo utilizzarla, nel caso in cui avessimo bisogno per esempio di istanziare in un modo differente la classe, oppure se volessimo sostituire il db MySql con un altro database(per esempio un db Postgres), dovremmo andare a modificare diversi punti nella nostra codebase.
+Se istanziassimo la classe *MySqlCustomerRepository* in ogni punto del software nel quale vogliamo utilizzarla, nel caso in cui avessimo bisogno, per esempio, di istanziare in un modo differente la classe, oppure se volessimo sostituire il db MySql con un altro tipo di database (per esempio un db Postgres), dovremmo andare a modificare diversi punti nella nostra codebase.
 
 Una solizione per ridurre questo accoppiamento sarebbe quella di utilizzare la Dependency Injection.
 
@@ -86,7 +86,7 @@ class CustomersCalculatorService {
 
 Quello che abbiamo fatto è stato *iniettare* nel costruttore della classe CustomersCalculatorService la sua dipendenza MySqlCustomerRepository.
 
-Questa tecnica, è inotlre in linea e viene spesso utilizzata con il principio SOLID di inversione delle dipendenze (Dependency Inversion Principle).
+Questa tecnica,inotlre, viene spesso utilizzata assieme al principio SOLID di inversione delle dipendenze *(Dependency Inversion Principle)*.
 
 > a. High-level modules should not depend on low-level modules. Both should depend on abstractions.
 > 
@@ -96,7 +96,7 @@ Questa tecnica, è inotlre in linea e viene spesso utilizzata con il principio S
 
 In sostanza le nostre classi dovrebbero dipendere da delle astrazioni e non dalle classi concrete.
 
-Vediamo come possiamo ridurre l'accoppiamento utilizzando un astrazione della classe MySqlCustomerRepository e quindi introduciam un interfeccia:
+Vediamo come possiamo ridurre l'accoppiamento utilizzando un astrazione della classe MySqlCustomerRepository, quindi introduciamo un interfeccia:
 
 ```java
 interface CustomerRepository {
@@ -123,15 +123,14 @@ class CustomersCalculatorService {
 }
 ```
 
-Quello che abbiamo fatto è stato introdurre l'interfaccia CustomerRepository, che viene implementata da MySqlCustomerRepository ed invece di iniettare la classe concreta nel costruttore
-di CustomersCalculatorService andiamo ad iniettare la sua interfaccia.
+Quello che abbiamo fatto è stato introdurre l'interfaccia *CustomerRepository*, che viene implementata da *MySqlCustomerRepository* ed invece di iniettare la classe concreta nel costruttore di *CustomersCalculatorService* andiamo ad iniettare questa interfaccia.
 
-Adesso la classe CustomersCalculatorService non dipenderà più dalla classe MySqlCustomerRepository, ma bensì dalla sua interfaccia.
+Adesso la classe *CustomersCalculatorServic*e non dipenderà più dalla classe *MySqlCustomerRepository*, ma bensì dalla sua interfaccia *CustomerRepository*.
 
-Che vantaggi ci da utilizzare questo approcio ?
+Che vantaggi ci porta l'utilizzo di questo approcio ?
 
 Se dovessimo per esempio sostituire il database MySql, con un altro database, per esempio un database DynamoDB.
-Quello che dovremo fare sarà semplicemente andare ad introdurre una nuova classe, ed iniettare questo nuova calsse al posto della classe MySqlCustomerRepository.
+Quello che faremo sarà semplicemente andare ad introdurre una nuova classe che implementa l'interfaccia corretta, ed iniettare questo nuova calsse al posto della classe MySqlCustomerRepository.
 
 Vediamolo nel concreto:
 
@@ -167,7 +166,7 @@ class CustomersCalculatorService {
 ```
 
 Abbiamo creato le nuova classe DynamoDbCustomerRepository che implementa l'interfaccia CustomerRepository in modo da poterla iniettare in CustomersCalculatorService.
-Come avrai notato non è stato necessatio apportare alcuna modifica alla classe CustomersCalculatorService, l'unica modifica necessaria sarà demandata all'esterno al componente che si occupa della configurazione delle dipendenze e dell'inizializzazione delle diverse classi.
+Come avrai notato non è stato necessatio apportare alcuna modifica alla classe CustomersCalculatorService, l'unica modifica necessaria sarà demandata all'esterno, al componente che si occupa della configurazione delle dipendenze e dell'inizializzazione delle diverse classi.
 
 Usando questo approcio non solo rispettiamo il Dependency Inversion Principle, ma anche l'OCP (Open Closed Principle).
 L'Open Closed Principle afferma che il software dvorebbe essere aperto alle estensioni, ma chiuso al cambiamento. In sostanza un software dovrebbe essere estendibile per l'aggiunta di nuove funzionalità, senza richiedere modfiche dirette al codice esistente.
