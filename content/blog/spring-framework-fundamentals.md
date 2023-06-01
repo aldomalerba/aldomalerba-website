@@ -1,38 +1,31 @@
 ---
 external: false
 draft: false
-title: "Intrduzione a Spring Framework"
+title: "Ridurre l'accoppiamento e migliorare la qualità del codice con la Dependency Injection"
 description: "Introduzione ai concetti principali di Spring Framework come Dependency Injection e Depenency Inversion Principle."
 date: 2022-11-02
 ---
 
-## Disaccoppiamento, Dependency Injection e Inversion of Control
+## Introduzione
 
 > "C'è stato un cambio nei riquisiti di business e dovremmo apportare questa piccola modifica"
 
-Quante volte ti è capitato di sentire una frase simile?
+ *Quante volte ti è capitato di sentire una frase simile? Quanto tempo ci hai impiegato per apportare quella piccola modifica?*
 
-Se non ti sei allarmato e hai apportato le modifiche con estrema facilità, allora sei sulla buona strada.
+ Nello sviluppo software, tutto cambia, i requisiti di business cambiano, la tecnlogia evolve e le persone cha lavorano su un progetto cambiano nel tempo, il cambiamento è inevitabile.    
+ Per questo motivo, uno degli obiettivi di ogni sviluppatore dovrebbe essere quello di scrivere codice che risponda bene al cambiamento, un aspetto cruciale quando si parla di qualità.
 
-Se nel caso contrario, non è stato così allora potrebbe essere un campanello d'allarme, quanto tempo ci hai impiegato per apportare quella semplice modifica?
+Tutto molto bello, ma come faccio a scrivere codice che sia più flessibile e manutenibile?
 
-La qualità del software è influenzata da diversi fattori, uno di questi è la facilità con la quale è possibile apportare delle modifiche al sistema.
-Come sappiamo nello sviluppo software il cambiamento è inevitabile. Tutto cambia, i requisiti di business cambiano, la tecnlogia evolve e le persone cha lavorano su un progetto cambiano nel tempo.
+## Accoppiamento
 
-Uno degli obiettivi di uno svilupparore dovrebbe essere quindi quello di scrive del software che risponda bene al cambiamento, che è un aspetto cruciale quando si parla di qualità.
+Una delle caratteristiche da tenere in considerazione nella programmazione è l'**accoppiamento**.
+Più alto sarà il grado di dipendenza tra le classi, più alto sarà l'accoppiamento (*tight coupling*).     
+L'obiettivo dovrebbe essere quello di scrivere delle classi che non dipendano fortemente l'una dalle altre, cercando così di ridurre l'accoppiamento (*loose coupling*).
 
-Per scrivere software che risponda bene al cambiamento dobbiamo scrivere software flessibile e manutenibile.
-Se scriviamo codice flessibile e facile da mantenere, quando i requisiti di business cambieranno, sarà più semplice apportare le modifiche richieste.
+*Si dice che c'è una **dipendenza** tra due classi **quando una classe A utilizza** o dipende da **una classe B** per eseguire determinate operazioni.*
 
-**Tutto molto bello, ma come faccio a scrivere codice più flessibile e manutenibile ?**
-
-### Accoppiamento
-
-Una delle caratteristiche da tenere in considerazione nella programmazione OO è l'**accoppiamento**.
-Più alto sarà il grado di dipendenza tra le classi, più alto sarà l'accoppiamento (tight coupling). L'obiettivo dovrebbe essere quello di scrivere delle classi che non dipendano fortemente l'una dalle altre, cercando così di ridurre l'accoppiamento (loose coupling).
-
-Vediamo ora un esempio di forte dipendenza tra due classi.
-
+Vediamo un esempio di forte dipendenza tra due classi.
 ```java
 class MySqlCustomerRepository {
     public int[] ages() {
@@ -45,6 +38,7 @@ class CustomersCalculatorService {
     MySqlCustomerRepository repository;
 
     public CustomersCalculatorService() {
+        //Istanziamo direttamente la classe MySqlCustomerRepository
         this.repository = new MySqlCustomerRepository();
     }
 
@@ -58,22 +52,28 @@ In questo esempio la classe *CustomersCalculatorService* dipende fortemente dall
 
 La classe *MySqlCustomerRepository* viene istanziata direttamente nel costruttore di *CustomersCalculatorService* e questo crea un forte accoppiamento tra le due classi.
 
-Se istanziassimo la classe *MySqlCustomerRepository* in ogni punto del software nel quale vogliamo utilizzarla, nel caso in cui avessimo bisogno, per esempio, di istanziare in un modo differente la classe, oppure se volessimo sostituire il db MySql con un altro tipo di database (per esempio un db Postgres), dovremmo andare a modificare diversi punti nella nostra codebase.
+Se questo approcio venisse utilizzato in tutta la nostra codebase, se per esempio, volessimo sostituire il tipo di database con un db Postgres, dovremmo andare a modificare diversi punti della nostra applicazione.
 
-Una solizione per ridurre questo accoppiamento sarebbe quella di utilizzare la Dependency Injection.
+Una soluzione per ridurre questo accoppiamento è l'utilizzo della *Dependency Injection*.
 
-### Dependency Injection
+## Dependency Injection
 
-La **Dependency Injection** è una tecnica che ci permette di disaccoppiare la creazione di un oggetto dal suo effettivo utilizzo.
-Per raggiungere questo obiettivo, l'inizializzazione dei collaboratori viene fatta all'esterno e si dice che vengono *iniettati* nei client che hanno bisgno di utilizzarli.
+La **Dependency Injection** è una tecnica che ci permette di disaccoppiare la creazione di un oggetto dal suo effettivo utilizzo.   
+Per raggiungere questo obiettivo, l'inizializzazione dei collaboratori viene fatta all'esterno e si dice che vengono *iniettati* come dipendenze nei client che hanno bisgno di utilizzarli.
 
-Vediamo come possiamo applicare la dependency injection alla classe CustomersCalculatorService:
+Esistono 3 tipi di dependency injection:
 
+1. **Constructor injection:** La dipendenza viene passata come parametro al costruttore.
+2. **Setter injection:** La classe client espone un metodo setter utilizzato per iniettare la dipendenza.
+3. **Interface injection:** Simile alla setter injection, in questo caso, la classe client implementa un interfaccia che definisce un metodo che sarà utilizzato per iniettare la dipendenza.
+
+Vediamo come possiamo applicare la dependency injection alla classe CustomersCalculatorService utilizzando la constructor injection:
 ```java
 class CustomersCalculatorService {
 
     MySqlCustomerRepository repository;
 
+    //Passiamo la dipendenza come parametro del costruttore
     public CustomersCalculatorService(MySqlCustomerRepository repository) {
         this.repository = repository;
     }
@@ -84,9 +84,13 @@ class CustomersCalculatorService {
 }
 ```
 
-Quello che abbiamo fatto è stato *iniettare* nel costruttore della classe CustomersCalculatorService la sua dipendenza MySqlCustomerRepository.
+Quello che faremo sarà *iniettare* nel costruttore della classe CustomersCalculatorService la sua dipendenza MySqlCustomerRepository.
 
-Questa tecnica,inotlre, viene spesso utilizzata assieme al principio SOLID di inversione delle dipendenze *(Dependency Inversion Principle)*.
+La responsabilità di inizializzazione e configurazione di questa dipendenza viene tolta dal client per essere demandata ad un compoenente esterno.
+
+Questa tecnica, inoltre, viene spesso utilizzata assieme al principio SOLID di inversione delle dipendenze *(Dependency Inversion Principle)*.
+
+## Dependency Inversion Principle
 
 > a. High-level modules should not depend on low-level modules. Both should depend on abstractions.
 > 
@@ -96,13 +100,15 @@ Questa tecnica,inotlre, viene spesso utilizzata assieme al principio SOLID di in
 
 In sostanza le nostre classi dovrebbero dipendere da delle astrazioni e non dalle classi concrete.
 
-Vediamo come possiamo ridurre l'accoppiamento utilizzando un astrazione della classe MySqlCustomerRepository, quindi introduciamo un interfeccia:
+Vediamo come possiamo ridurre l'accoppiamento utilizzando un astrazione della classe MySqlCustomerRepository:
 
 ```java
+//Aggiungiamo l'interfaccia CustomerRepository
 interface CustomerRepository {
     int[] ages();
 }
 
+//Implementiamo l'interfaccia che abbiamo creato
 class MySqlCustomerRepository implements CustomerRepository {
     public int[] ages() {
         return new int[]{21, 34, 54, 18};
@@ -113,6 +119,7 @@ class CustomersCalculatorService {
 
     CustomerRepository repository;
 
+    //Utilizziamo l'interfaccia come parametro del costruttore
     public CustomersCalculatorService(CustomerRepository repository) {
         this.repository = repository;
     }
@@ -123,17 +130,16 @@ class CustomersCalculatorService {
 }
 ```
 
-Quello che abbiamo fatto è stato introdurre l'interfaccia *CustomerRepository*, che viene implementata da *MySqlCustomerRepository* ed invece di iniettare la classe concreta nel costruttore di *CustomersCalculatorService* andiamo ad iniettare questa interfaccia.
+Quello che abbiamo fatto è stato introdurre l'interfaccia *CustomerRepository*, che viene implementata da *MySqlCustomerRepository* ed invece di utilizzare la classe concreta come parametro del costruttore di *CustomersCalculatorService* utilizziamo l'interfaccia.
 
-Adesso la classe *CustomersCalculatorServic*e non dipenderà più dalla classe *MySqlCustomerRepository*, ma bensì dalla sua interfaccia *CustomerRepository*.
+Adesso la classe *CustomersCalculatorServic*e non dipenderà più dalla classe *MySqlCustomerRepository*, ma dalla sua interfaccia *CustomerRepository*.
 
 Che vantaggi ci porta l'utilizzo di questo approcio ?
 
-Se dovessimo per esempio sostituire il database MySql, con un altro database, per esempio un database DynamoDB.
-Quello che faremo sarà semplicemente andare ad introdurre una nuova classe che implementa l'interfaccia corretta, ed iniettare questo nuova calsse al posto della classe MySqlCustomerRepository.
+Adesso possiamo usare come dipendenza qualsiasi classe che implementa l'interfaccia CustomerRepository.     
+Se dovessimo per esempio sostituire il tipo di database, quello che faremo sarà introdurre una nuova classe che implementa l'interfaccia corretta.
 
 Vediamolo nel concreto:
-
 ```java
 interface CustomerRepository {
     int[] ages();
@@ -145,6 +151,7 @@ class MySqlCustomerRepository implements CustomerRepository {
     }
 }
 
+//Creiamo una nuova classe che implementa l'interfaccia CustomerRepository
 class DynamoDbCustomerRepository implements CustomerRepository {
     public int[] ages() {
         return new int[]{101, 304, 504, 188};
@@ -165,19 +172,24 @@ class CustomersCalculatorService {
 }
 ```
 
-Abbiamo creato le nuova classe DynamoDbCustomerRepository che implementa l'interfaccia CustomerRepository in modo da poterla iniettare in CustomersCalculatorService.
-Come avrai notato non è stato necessatio apportare alcuna modifica alla classe CustomersCalculatorService, l'unica modifica necessaria sarà demandata all'esterno, al componente che si occupa della configurazione delle dipendenze e dell'inizializzazione delle diverse classi.
+Abbiamo creato le nuova classe *DynamoDbCustomerRepository* che implementa l'interfaccia *CustomerRepository* in modo da poterla iniettare in CustomersCalculatorService.   
 
-Usando questo approcio non solo rispettiamo il Dependency Inversion Principle, ma anche l'OCP (Open Closed Principle).
-L'Open Closed Principle afferma che il software dvorebbe essere aperto alle estensioni, ma chiuso al cambiamento. In sostanza un software dovrebbe essere estendibile per l'aggiunta di nuove funzionalità, senza richiedere modfiche dirette al codice esistente.
+Non abbiamo modificato direttamente la classe CustomersCalculatorService, ma abbiamo esteso il nostro sistema aggiungendo una nuova classe.
 
-Nel nostro caso stiamo rispettando questo principio perchè per sostituire il tipo di database non abbiamo modificato direttamente la classe CustomersCalculatorService, ma abbiamo esteso il nostro sistema aggiungendo una nuova classe DynamoDbCustomerRepository che implementa l'interfaccia CustomerRepository.
+Se volessimo aggiungere un nuovo tipo di database ci basterebbe creare una uleriore classe che implementa l'interfaccia CustomerRepository.
 
-Se volessimo aggiungere un nuovo tipo di database ci basterebbe creare una nuova classe che implementa l'interfaccia CustomerRepository e iniettarla nel costruttore di CustomersCalculatorService.
+Il compito di configutare le dipendenze e inizializzarle decidendo quali iniettare nel lostro client sarà demandato ad un componente esterno.
+
+## Inversion of Control
+
+L'Inversion of Control è un principio (spesso utilizzato col la Dependency Injection) secondo il quale la creazione dei nostri oggetti e la creazione delle loro dipendenze non avviene
+all'interno delle classi, ma è delegata ad un componente esterno o un framework.
 
 Come iniettiamo le dipendenze:
 ```java
-public class SpringFrameworkFundamentalsApplication {
+
+
+public class DemoApplication {
 
     public static void main(String[] args) {
 
@@ -187,15 +199,15 @@ public class SpringFrameworkFundamentalsApplication {
 
         var oldest = calculator.findOldest();
 
-        System.out.println("Oldest: " + oldest);
+        System.out.println("The oldest customer is: " + oldest);
     }
 }
 ```
 
 La classe sopra rappresenta l'entry point della nostra applicazione.
-Come potrai intuire utilizzando questo approcio l'applicazione diventa più flessibile e modulare, ma implica un piccolo tradeoff, bensì in questo modo stiamo riducendo la dipendenza stretta tra le classi e bensì stiamo andando ad aumentare molto la flessibilità, manutenibiltà e testabilità della nostra applicazione, stiamo aggiungendo un livello di complessità.
+Come potrai intuire utilizzando questo approcio l'applicazione diventa più flessibile e modulare, ma implica un piccolo tradeoff, stiamo aggiungendo un livello di complessità.
 
-Nell'esempio fornito sopra con la classe *SpringFrameworkFundamentalsApplication* stiamo semplicemente andando ad inizializzare uno dei due repository, inizializziamo il nostro CustomersCalculatorService e gli iniettiamo la dipendenza corretta.
+Nell'esempio fornito sopra con la classe *DemoApplication* stiamo semplicemente andando ad inizializzare uno dei due repository, inizializziamo il nostro CustomersCalculatorService e gli iniettiamo la dipendenza corretta.
 Può sembrare semplice, ma in applicazioni reali e più complesse, le classi da configurare sono diverse e bisogna stare attenti ed iniettare sempre la dipendeze corrette nel punto giusto.
 
 In questo ci sono diversi framework che ci possono aiutare e uno di questo è **Spring**.
