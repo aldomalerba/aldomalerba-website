@@ -8,11 +8,11 @@ date: 2022-11-02
 
 ## Introduzione
 
-> "C'è stato un cambio nei riquisiti di business e dovremmo apportare questa piccola modifica"
+> "C'è stato un cambio nei requisiti di business e dovremmo apportare questa piccola modifica"
 
  *Quante volte ti è capitato di sentire una frase simile? Quanto tempo ci hai impiegato per apportare quella piccola modifica?*
 
- Nello sviluppo software, tutto cambia, i requisiti di business cambiano, la tecnlogia evolve e le persone cha lavorano su un progetto cambiano nel tempo, il cambiamento è inevitabile.    
+ Nello sviluppo software, tutto cambia, i requisiti di business cambiano, la tecnologia evolve e le persone che lavorano su un progetto cambiano nel tempo, il cambiamento è inevitabile.    
  Per questo motivo, uno degli obiettivi di ogni sviluppatore dovrebbe essere quello di scrivere codice che risponda bene al cambiamento, un aspetto cruciale quando si parla di qualità.
 
 Tutto molto bello, ma come faccio a scrivere codice che sia più flessibile e manutenibile?
@@ -52,22 +52,25 @@ In questo esempio la classe *CustomersCalculatorService* dipende fortemente dall
 
 La classe *MySqlCustomerRepository* viene istanziata direttamente nel costruttore di *CustomersCalculatorService* e questo crea un forte accoppiamento tra le due classi.
 
-Se questo approcio venisse utilizzato in tutta la nostra codebase, se per esempio, volessimo sostituire il tipo di database con un db Postgres, dovremmo andare a modificare diversi punti della nostra applicazione.
+Se questo approccio venisse utilizzato in tutta la nostra codebase, se per esempio, volessimo sostituire il tipo di database con un DB Postgres, dovremmo andare a modificare diversi punti della nostra applicazione.
 
 Una soluzione per ridurre questo accoppiamento è l'utilizzo della *Dependency Injection*.
 
 ## Dependency Injection
 
 La **Dependency Injection** è una tecnica che ci permette di disaccoppiare la creazione di un oggetto dal suo effettivo utilizzo.   
-Per raggiungere questo obiettivo, l'inizializzazione dei collaboratori viene fatta all'esterno e si dice che vengono *iniettati* come dipendenze nei client che hanno bisgno di utilizzarli.
+Per raggiungere questo obiettivo, l'inizializzazione dei collaboratori viene fatta all'esterno e si dice che vengono *iniettati* come dipendenze nei client che hanno bisogno di utilizzarli.
 
 Esistono 3 tipi di dependency injection:
+1. Constructor injection
+1. Setter injection
+2. Interface injection
 
-1. **Constructor injection:** La dipendenza viene passata come parametro al costruttore.
-2. **Setter injection:** La classe client espone un metodo setter utilizzato per iniettare la dipendenza.
-3. **Interface injection:** Simile alla setter injection, in questo caso, la classe client implementa un interfaccia che definisce un metodo che sarà utilizzato per iniettare la dipendenza.
+Vediamo come applicarli alla classe CustomersCalculatorService.
+### Constructor injection
+In questo tipo di dependency injection la dipendenza viene passata come parametro al costruttore, è il metodo più comune ed utilizzato di dependency injection.     
+Utilizzare questa tecnica ci assicura che il client sarà sempre in uno stato valito in quanto non potrà essere inizializzato senza le sue dipendenze.
 
-Vediamo come possiamo applicare la dependency injection alla classe CustomersCalculatorService utilizzando la constructor injection:
 ```java
 class CustomersCalculatorService {
 
@@ -84,9 +87,51 @@ class CustomersCalculatorService {
 }
 ```
 
+
+### Setter injection
+La classe client espone un metodo setter utilizzato per iniettare la dipendenza. Dal momento in cui il client viene inizializzato la sua dipendenza può essere iniettata in qualsiasi momento.  Questa tecnica ci permette di cambiare la dipendenza utilizzata a run-time, ma non ci assiucura che il client sia sempre in uno stato valido.
+```java
+class CustomersCalculatorService {
+
+    private CustomerRepository repository;
+
+    //Utilizziamo un setter per iniettare la dipendenza
+    public void setRepository(CustomerRepository repository) {
+        this.repository = repository;
+    }
+
+    public int findOldest() {
+        return Arrays.stream(repository.ages()).max().orElse(0);
+    }
+}
+```
+
+### Interface injection
+Simile alla setter injection, in questo caso, la classe client implementa un interfaccia che definisce un metodo che sarà utilizzato per iniettare la dipendenza. Anche questa tecnica ci può offrire una certa flessibilà, ma non assicura che il client sia sempre in uno stato valido.
+
+```java
+interface RepositorySetter {
+    public void inject(CustomerRepository service);
+}
+
+class CustomersCalculatorService implements RepositorySetter {
+
+    private CustomerRepository repository;
+    
+    public void inject(CustomerRepository repository) {
+        this.repository = repository;
+    }
+
+    public int findOldest() {
+        return Arrays.stream(repository.ages()).max().orElse(0);
+    }
+}
+```
+
+
 Quello che faremo sarà *iniettare* nel costruttore della classe CustomersCalculatorService la sua dipendenza MySqlCustomerRepository.
 
-La responsabilità di inizializzazione e configurazione di questa dipendenza viene tolta dal client per essere demandata ad un compoenente esterno.
+La responsabilità di inizializzazione e configurazione di questa dipendenza viene tolta dal client per essere demandata ad un componente esterno.
 
 Questa tecnica, inoltre, viene spesso utilizzata assieme al principio SOLID di inversione delle dipendenze *(Dependency Inversion Principle)*.
 
@@ -134,10 +179,10 @@ Quello che abbiamo fatto è stato introdurre l'interfaccia *CustomerRepository*,
 
 Adesso la classe *CustomersCalculatorServic*e non dipenderà più dalla classe *MySqlCustomerRepository*, ma dalla sua interfaccia *CustomerRepository*.
 
-Che vantaggi ci porta l'utilizzo di questo approcio ?
+Che vantaggi ci porta l'utilizzo di questo approccio ?
 
 Adesso possiamo usare come dipendenza qualsiasi classe che implementa l'interfaccia CustomerRepository.     
-Se dovessimo per esempio sostituire il tipo di database, quello che faremo sarà introdurre una nuova classe che implementa l'interfaccia corretta.
+Se dovessimo, per esempio, sostituire il tipo di database, quello che faremo sarà introdurre una nuova classe che implementa l'interfaccia corretta.
 
 Vediamolo nel concreto:
 ```java
@@ -176,26 +221,24 @@ Abbiamo creato le nuova classe *DynamoDbCustomerRepository* che implementa l'int
 
 Non abbiamo modificato direttamente la classe CustomersCalculatorService, ma abbiamo esteso il nostro sistema aggiungendo una nuova classe.
 
-Se volessimo aggiungere un nuovo tipo di database ci basterebbe creare una uleriore classe che implementa l'interfaccia CustomerRepository.
+Se volessimo aggiungere un nuovo tipo di database basterebbe creare un ulteriore classe che implementa l'interfaccia CustomerRepository.
 
-Il compito di configutare le dipendenze e inizializzarle decidendo quali iniettare nel lostro client sarà demandato ad un componente esterno.
+Il compito di configurare le dipendenze e inizializzarle decidendo quali iniettare nel client sarà demandato ad un componente esterno, che è il comportamento alla base dell'Inversion of Control (IoC)
 
 ## Inversion of Control
 
-L'Inversion of Control è un principio (spesso utilizzato col la Dependency Injection) secondo il quale la creazione dei nostri oggetti e la creazione delle loro dipendenze non avviene
-all'interno delle classi, ma è delegata ad un componente esterno o un framework.
+L'Inversion of Control è un principio (spesso utilizzato con la Dependency Injection) secondo il quale la creazione dei nostri oggetti e la creazione delle loro dipendenze non avviene
+all'interno delle classi, ma è delegata ad un componente esterno o un framework, invertendo così il flusso di esecuzione dell'applicazione.
 
 Come iniettiamo le dipendenze:
 ```java
-
-
 public class DemoApplication {
 
     public static void main(String[] args) {
 
-        //var repository = new MySqlCustomerRepository();
-        var repository = new DynamoDbCustomerRepository();
-        var calculator = new CustomersCalculatorService(repository);
+        var mysql = new MySqlCustomerRepository();
+        var dynamoDB = new DynamoDbCustomerRepository();
+        var calculator = new CustomersCalculatorService(dynamoDB);
 
         var oldest = calculator.findOldest();
 
@@ -204,10 +247,59 @@ public class DemoApplication {
 }
 ```
 
-La classe sopra rappresenta l'entry point della nostra applicazione.
-Come potrai intuire utilizzando questo approcio l'applicazione diventa più flessibile e modulare, ma implica un piccolo tradeoff, stiamo aggiungendo un livello di complessità.
+La classe sopra rappresenta il punto di ingresso della nostra applicazione.
+Come potrai intuire utilizzando questo approccio l'applicazione diventa più flessibile e modulare, ma implica un piccolo tradeoff, stiamo aggiungendo un livello di complessità.
 
-Nell'esempio fornito sopra con la classe *DemoApplication* stiamo semplicemente andando ad inizializzare uno dei due repository, inizializziamo il nostro CustomersCalculatorService e gli iniettiamo la dipendenza corretta.
-Può sembrare semplice, ma in applicazioni reali e più complesse, le classi da configurare sono diverse e bisogna stare attenti ed iniettare sempre la dipendeze corrette nel punto giusto.
+Nell'esempio fornito la classe *DemoApplication* può sembrare semplice, ma in applicazioni reali e più complesse, le classi da configurare sono diverse e bisogna stare attenti ed iniettare sempre le dipendenze corrette nel punto giusto.
 
-In questo ci sono diversi framework che ci possono aiutare e uno di questo è **Spring**.
+Per aiutarci in questo ci sono diversi framework che possiamo utilizzare.
+In Java il più famoso e ampliamente utilizzato è il framework Spring, che basa il suo funzionamento proprio sulla Dependency Injection e sull'Inversion of Control.
+
+
+```java
+...
+
+@Component
+class MySqlCustomerRepository implements CustomerRepository {
+    public int[] ages() {
+        return new int[]{21, 34, 54, 18};
+    }
+}
+
+@Component
+@Primary
+class DynamoDbCustomerRepository implements CustomerRepository {
+    public int[] ages() {
+        return new int[]{101, 304, 504, 188};
+    }
+}
+
+@Component
+class CustomersCalculatorService {
+
+    @Autowired
+    private CustomerRepository repository;
+
+    public int findOldest() {
+        return Arrays.stream(repository.ages()).max().orElse(0);
+    }
+}
+
+@Configuration
+@ComponentScan
+public class DemoApplication {
+
+    public static void main(String[] args) {
+
+        try (var context = new AnnotationConfigApplicationContext(DemoApplication.class)) {
+
+            var customerService = context.getBean(CustomersCalculatorService.class);
+
+            var oldest = customerService.findOldest();
+
+            System.out.println("The oldest customer is: " + oldest);
+        }
+
+    }
+}
+```
