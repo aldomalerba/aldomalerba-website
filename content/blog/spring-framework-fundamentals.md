@@ -89,7 +89,7 @@ class CustomersCalculatorService {
 
 
 ### Setter injection
-La classe client espone un metodo setter utilizzato per iniettare la dipendenza. Dal momento in cui il client viene inizializzato la sua dipendenza può essere iniettata in qualsiasi momento.  Questa tecnica ci permette di cambiare la dipendenza utilizzata a run-time, ma non ci assiucura che il client sia sempre in uno stato valido.
+La classe client espone un metodo setter utilizzato per iniettare la dipendenza. Dal momento in cui il client viene inizializzato la sua dipendenza può essere iniettata in qualsiasi momento.  Questa tecnica ci permette di cambiare la dipendenza utilizzata a runtime, ma non ci assiucura che il client sia sempre in uno stato valido.
 ```java
 class CustomersCalculatorService {
 
@@ -143,7 +143,7 @@ Questa tecnica, inoltre, viene spesso utilizzata assieme al principio SOLID di i
 > 
 >-- Robert C. Martin (Uncle Bob)
 
-In sostanza le nostre classi dovrebbero dipendere da delle astrazioni e non dalle classi concrete.
+In sostanza secondo questo ptincipio le nostre classi dovrebbero dipendere da delle astrazioni e non dalle classi concrete.
 
 Vediamo come possiamo ridurre l'accoppiamento utilizzando un astrazione della classe MySqlCustomerRepository:
 
@@ -247,13 +247,16 @@ public class DemoApplication {
 }
 ```
 
-La classe sopra rappresenta il punto di ingresso della nostra applicazione.
+La classe sopra, rappresenta il punto di ingresso della nostra applicazione.
 Come potrai intuire utilizzando questo approccio l'applicazione diventa più flessibile e modulare, ma implica un piccolo tradeoff, stiamo aggiungendo un livello di complessità.
 
 Nell'esempio fornito la classe *DemoApplication* può sembrare semplice, ma in applicazioni reali e più complesse, le classi da configurare sono diverse e bisogna stare attenti ed iniettare sempre le dipendenze corrette nel punto giusto.
 
 Per aiutarci in questo ci sono diversi framework che possiamo utilizzare.
 In Java il più famoso e ampliamente utilizzato è il framework Spring, che basa il suo funzionamento proprio sulla Dependency Injection e sull'Inversion of Control.
+
+Spring infatti delega la creazione e la configurazione degli oggetti e delle loro dipendenze all'IoC Container.
+In questo modo l'inizializzazione delle classi non avviene a livello applicativo, permettendoi di concentrarci sulla business logic.
 
 
 ```java
@@ -303,3 +306,7 @@ public class DemoApplication {
     }
 }
 ```
+
+## Conclusione
+
+//TODO Scrivere la conclusione
