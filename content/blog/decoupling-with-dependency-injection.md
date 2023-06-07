@@ -2,7 +2,7 @@
 external: false
 draft: false
 title: "Ridurre l'accoppiamento nel codice con la Dependency Injection"
-description: "Introduzione ai concetti principali di Spring Framework come Dependency Injection e Depenency Inversion Principle."
+description: "Scopri come ridurre l'accoppiamento tra le classi nel tuo codice utilizzando la Dependency Injection. Questo blog post ti guiderà attraverso i concetti di accoppiamento e dipendenza, e ti mostrerà come la Dependency Injection può rendere il tuo codice più flessibile, manutenibile e testabile. Imparerai anche l'importanza del principio di inversione delle dipendenze e come applicarlo per ottenere ulteriori vantaggi. Leggi ora e scopri come migliorare la qualità del tuo codice!"
 date: 2023-06-07
 ---
 
@@ -252,7 +252,7 @@ Come hai potuto intuire la Dependency Injection ci offre tanti vantaggi, ma stia
 Bisogna infatti stare attenti ad iniettare sempre le dipendenze corrette nel punto e al momento giusto.
 
 Per aiutarci in questo ci sono diversi framework che possiamo utilizzare.       
-       
+
 In Java il più famoso e ampiamente utilizzato è il framework **Spring**, che basa il suo funzionamento proprio sulla Dependency Injection e sull'Inversion of Control, ma ne esistono diversi, come Guice o Dagger.
 
 ## Conclusione
