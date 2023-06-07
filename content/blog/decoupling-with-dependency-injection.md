@@ -1,7 +1,7 @@
 ---
 external: false
 draft: false
-title: "Ridurre l'accoppiamento nel codice: Introduzione alla Dependency Injection"
+title: "Ridurre l'accoppiamento nel codice con la Dependency Injection"
 description: "Introduzione ai concetti principali di Spring Framework come Dependency Injection e Depenency Inversion Principle."
 date: 2023-06-07
 ---
