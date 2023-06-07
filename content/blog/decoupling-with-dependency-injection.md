@@ -200,7 +200,7 @@ class CustomersService {
 
 Quello che abbiamo fatto è stato introdurre l'interfaccia *CustomerRepository*, che viene implementata da *CustomerRepositoryMySql* ed invece di utilizzare la classe concreta come parametro del costruttore del servizio utilizziamo l'interfaccia.
 
-Adesso la classe *CustomersCalculatorServic*e non dipenderà più dalla classe *CustomerRepositoryMySql*, ma dalla sua interfaccia *CustomerRepository*.
+Adesso il servizio non dipenderà più dalla classe concreta, ma dalla sua interfaccia.
 
 Che vantaggi ci porta l'utilizzo di questo approccio ?
 
@@ -243,13 +243,16 @@ class CustomersService {
 
 Abbiamo creato le nuova classe *CustomerRepositoryDynamoDb* che implementa l'interfaccia *CustomerRepository* in modo da poterla iniettare nel servizio.   
 
-Non abbiamo modificato direttamente la classe CustomersService, ma abbiamo esteso il nostro sistema aggiungendo una nuova classe.
+L'unica modifica necessaria per utilizzare la nuova classe, sarà modificare l'istanza iniettata nel costruttore.
 
-La classe CustomersService, infatti, accetta come dipendenza qualsiasi classe che implementa l'interfaccia CustomerRepository. L'unica modifica necessaria per utilizzare la nuova classe, sarà modificare l'istanza iniettata nel costruttore.
+Il compito di configurare le dipendenze e inizializzarle decidendo quali iniettare sarà affidato ad un componente esterno, comportamento alla base dell'Inversion of Control (IoC).         
 
-Il compito di configurare le dipendenze e inizializzarle decidendo quali iniettare nel client sarà affidato ad un componente esterno, comportamento alla base dell'Inversion of Control (IoC).
+Come hai potuto intuire la Dependency Injection ci offre tanti vantaggi, ma stiamo aggiungendo un livello di complessità che è quello della configurazione.
+
+Bisogna infatti stare attenti ad iniettare sempre le dipendenze corrette nel punto e al momento giusto.
 
 Per aiutarci in questo ci sono diversi framework che possiamo utilizzare.       
+       
 In Java il più famoso e ampiamente utilizzato è il framework **Spring**, che basa il suo funzionamento proprio sulla Dependency Injection e sull'Inversion of Control, ma ne esistono diversi, come Guice o Dagger.
 
 ## Conclusione
