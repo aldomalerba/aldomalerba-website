@@ -4,7 +4,7 @@
 export const SITE_TITLE = "Aldo Malerba";
 export const SITE_DESCRIPTION =
   "Portfolio e Blog di Aldo Malerba";
-export const TWITTER_HANDLE = "@";
+export const TWITTER_HANDLE = "@AldoMalerba_";
 export const MY_NAME = "Aldo Malerba";
 
 // setup in astro.config.mjs
