@@ -17,6 +17,15 @@ date: 2023-06-07
 
 Tutto molto bello, ma come faccio a scrivere codice che sia più flessibile e manutenibile?
 
+## Indice
+- [Accoppiamento](#accoppiamento)
+- [Dependency Injection](#dependency-injection)
+  - [Constructor injection](#constructor-injection)
+  - [Setter injection](#setter-injection)
+  - [Interface injection](#interface-injection)
+- [Dependency Inversion Principle](#dependency-inversion-principle)
+- [Conclusione](#conclusione)
+
 ## Accoppiamento
 
 Una delle caratteristiche da tenere in considerazione nella programmazione è l'**accoppiamento**.
@@ -240,8 +249,8 @@ La classe CustomersService, infatti, accetta come dipendenza qualsiasi classe ch
 
 Il compito di configurare le dipendenze e inizializzarle decidendo quali iniettare nel client sarà affidato ad un componente esterno, comportamento alla base dell'Inversion of Control (IoC).
 
-Per aiutarci in questo ci sono diversi framework che possiamo utilizzare.
-In Java il più famoso e ampiamente utilizzato è il framework **Spring*+, che basa il suo funzionamento proprio sulla Dependency Injection e sull'Inversion of Control, ma ne esistono diversi, come Guice o Dagger.
+Per aiutarci in questo ci sono diversi framework che possiamo utilizzare.       
+In Java il più famoso e ampiamente utilizzato è il framework **Spring**, che basa il suo funzionamento proprio sulla Dependency Injection e sull'Inversion of Control, ma ne esistono diversi, come Guice o Dagger.
 
 ## Conclusione
 
