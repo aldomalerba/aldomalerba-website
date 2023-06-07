@@ -29,8 +29,8 @@ Tutto molto bello, ma come faccio a scrivere codice che sia più flessibile e ma
 ## Accoppiamento
 
 Una delle caratteristiche da tenere in considerazione nella programmazione è l'**accoppiamento**.
-Più alto sarà il grado di dipendenza tra le classi, più alto sarà l'accoppiamento (*tight coupling*).     
-L'obiettivo dovrebbe essere quello di scrivere delle classi che non dipendano fortemente l'una dalle altre, cercando così di ridurre l'accoppiamento (*loose coupling*).
+Più alto sarà il grado di dipendenza tra le classi, più alto sarà l'accoppiamento (*tight coupling*).           
+L'obiettivo dovrebbe essere quello di scrivere delle classi che non dipendano fortemente l'una dall'altra per favorire così un basso accoppiamento (*loose coupling*).
 
 *Si dice che c'è una **dipendenza** tra due classi **quando una classe A utilizza** o dipende da **una classe B** per eseguire determinate operazioni.*
 
@@ -61,13 +61,13 @@ In questo esempio la classe *CustomersService* dipende fortemente dalla classe *
 
 La classe *CustomerRepositoryMySql* viene istanziata direttamente nel costruttore di *CustomersService* e questo crea un forte accoppiamento tra le due classi.
 
-Se questo approccio venisse utilizzato in tutta la nostra codebase e per esempio, volessimo sostituire il tipo di database con un DB Postgres, dovremmo andare a modificare diversi punti della nostra applicazione.
+Se questo approccio venisse utilizzato in tutta la nostra codebase e per esempio, volessimo sostituire il tipo di database, ad esempio da MySQL a PostgreSQL, dovremmo apportare modifiche a diversi punti della nostra applicazione.
 
 Una soluzione per ridurre questo accoppiamento è l'utilizzo della *Dependency Injection*.
 
 ## Dependency Injection
 
-La **Dependency Injection** è una tecnica che ci permette di disaccoppiare la creazione di un oggetto dal suo effettivo utilizzo.   
+La **Dependency Injection** (DI) è una tecnica che ci permette di disaccoppiare la creazione di un oggetto dal suo effettivo utilizzo.   
 Per raggiungere questo obiettivo, l'inizializzazione dei collaboratori viene fatta all'esterno e si dice che vengono *iniettati* come dipendenze nei client che hanno bisogno di utilizzarli.
 
 Esistono 3 tipi di dependency injection:
