@@ -4,11 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aldo Malerba</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #f8f8f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #272822;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+
+        h1 {
+            color: #66d9ef;
+            text-align: center;
+        }
+
+        h2 {
+            color: #f92672;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        a {
+            color: #a6e22e;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #f92672;
+        }
+
+        pre {
+            background-color: #383838;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 18px;
+        }
+
+        code {
+            color: #f8f8f2;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Unfortunatly this website is currently under construction</h2>
+        <h1>Hi! I'm Aldo an Agile Software Developer</h1>
+        <h2>!This website is currently under construction!</h2>
         <p>If you need to contact me, you can write an email to <a href="mailto:aldomalerba.dev@gmail.com">aldomalerba.dev@gmail.com</a> or you can reach me on <a href="https://www.linkedin.com/in/malerba-cataldo/">LinkedIn.</a></p>
-    </div>  
+        <div id="json-output"></div>
+    </div> 
+    <script>
+        const jsonData = {
+            "name": "Aldo",
+            "surname": "Malerba",
+            "age": 27,
+            "profession": "Agile Software Developer",
+            "eduction": [{
+                "institution": "ITIS Benedetto Castelli",
+                "course": "Computer Science and Telecomunications"
+            }],
+            "certifications": ["<a href='https://www.credly.com/badges/d2c988a8-8cfc-4cf8-bf75-7677bf084ee1/public_url'>AWS Certified Developer Associate</a>"],
+            "workExperiene" : [    {
+                "companyName": "Claranet Italia",
+                "role": "Agile Software Developer",
+                "startYear": 2021,
+                "endYear": null
+            },{
+                "companyName": "Regesta",
+                "role": "Software Developer",
+                "startYear": 2018,
+                "endYear": 2021           
+            }],
+            "skills": ["Extreme Programming", "Scrum", "TDD", "Iterative and incremental development", "Java/Kotlin", "Javascript/Typescript", "really I need to list all frameworks, languages, tools and stuffs that I used?"]
+        };
+
+        const formattedJson = JSON.stringify(jsonData, null, 4)
+        document.getElementById('json-output').innerHTML = `<pre><code>let profile = ${formattedJson}</code></pre>`;
+    </script>
 </body>
 </html>
