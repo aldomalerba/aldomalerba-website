@@ -3,7 +3,7 @@ const profile = {
     "surname": "Malerba",
     "age": 27,
     "profession": "Agile Software Developer",
-    "eduction": [{
+    "education": [{
         "institution": "ITIS Benedetto Castelli",
         "course": "Computer Science and Telecomunications"
     }],
@@ -19,7 +19,7 @@ const profile = {
         "startYear": 2018,
         "endYear": 2021           
     }],
-    "skills": ["Extreme Programming", "Scrum", "TDD", "Iterative and incremental development", "Java/Kotlin", "Javascript/Typescript", "really I need to list all frameworks, languages, tools and stuffs that I used?"]
+    "skills": ["Extreme Programming", "Scrum", "TDD", "Iterative and incremental development", "Java/Kotlin", "Javascript/Typescript", "others frameworks, languages, and tools", "feel free to reach out if you’d like to learn more!"]
 };
 
 const renderProfile = (id) => {
