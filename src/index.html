@@ -67,35 +67,8 @@
         <h2>!This website is currently under construction!</h2>
         <p>If you want to get in touch, you can email me at <a href="mailto:aldomalerba.dev@gmail.com">aldomalerba.dev@gmail.com</a> or connect with me on <a href="https://www.linkedin.com/in/malerba-cataldo/">LinkedIn</a>.</p>
         <p>If you'd like to view my CV, <a href="cv/cv_malerba_aldo.pdf">click here</a>. Or, why not? If you're undecided about what pizza to have this evening, <a href="https://pizza.aldomalerba.it/en">pizza.aldomalerba.it</a>.</p>
-        <div id="json-output"></div>
+        <div id="json-profile"></div>
     </div> 
-    <script>
-        const jsonData = {
-            "name": "Aldo",
-            "surname": "Malerba",
-            "age": 27,
-            "profession": "Agile Software Developer",
-            "eduction": [{
-                "institution": "ITIS Benedetto Castelli",
-                "course": "Computer Science and Telecomunications"
-            }],
-            "certifications": ["<a href='https://www.credly.com/badges/d2c988a8-8cfc-4cf8-bf75-7677bf084ee1/public_url'>AWS Certified Developer Associate</a>"],
-            "workExperience" : [    {
-                "companyName": "Claranet Italia",
-                "role": "Agile Software Developer",
-                "startYear": 2021,
-                "endYear": null
-            },{
-                "companyName": "Regesta",
-                "role": "Software Developer",
-                "startYear": 2018,
-                "endYear": 2021           
-            }],
-            "skills": ["Extreme Programming", "Scrum", "TDD", "Iterative and incremental development", "Java/Kotlin", "Javascript/Typescript", "really I need to list all frameworks, languages, tools and stuffs that I used?"]
-        };
-
-        const formattedJson = JSON.stringify(jsonData, null, 4)
-        document.getElementById('json-output').innerHTML = `<pre><code>let profile = ${formattedJson}</code></pre>`;
-    </script>
+    <script src="profile.js"></script>
 </body>
 </html>
