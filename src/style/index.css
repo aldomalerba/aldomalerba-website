@@ -18,12 +18,10 @@ body {
 
 h1 {
     color: #66d9ef;
-    text-align: center;
 }
 
-h2 {
-    color: #f92672;
-    text-align: center;
+h3 {
+    font-weight: bold;
 }
 
 p {
